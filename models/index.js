@@ -1,6 +1,6 @@
 const dbConfig = require("../config/db.config.js");
 const Sequelize = require("sequelize");
-const sequelize
+let sequelize
 if (process.env.DATABASE_URL) {
   sequelize = new Sequelize(process.env.DATABASE_URL, {
     dialect: 'postgres',
