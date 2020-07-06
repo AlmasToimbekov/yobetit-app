@@ -6,6 +6,7 @@ services:
     environment:
       PG_HOST: postgres
       PG_PORT: 5432
+      DATABASE_URL: postgres://fsktrgdkktmcbt:e7929351d7a362df38f1c6b1ff7139b79e0e781f9340c38e15709c490807e7ba@ec2-35-175-155-248.compute-1.amazonaws.com:5432/dcrivnlgr817pn
     build: 
       context: .
       target: prod
