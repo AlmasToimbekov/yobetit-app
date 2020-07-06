@@ -1,14 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const cors = require("cors");
 
 const app = express();
-
-var corsOptions = {
-    origin: "http://localhost:8081"
-};
-
-app.use(cors(corsOptions));
 
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
@@ -29,9 +22,18 @@ app.get("/", (req, res) => {
 });
 
 require("./routes/tutorial.routes")(app);
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static('client/build'));
+
+    const path = require('path');
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+    })
+
+}
 
 // set port, listen for requests
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);
 });

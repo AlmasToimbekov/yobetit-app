@@ -2,20 +2,22 @@ version: '3.5'
 
 services:
   yobetit-app:
-    image: yobetit-app:prod
+    image: yobetit-app:dev
+    environment:
+      PG_HOST: postgres
+      PG_PORT: 5432
     build: 
       context: .
-      target: prod
+      target: dev
     container_name: yobetit-app
     restart: always
     volumes: 
       - .:/app
     ports:
-      - "8080:8080"
+      - "80:8080"
+      - "3000:3000"
     depends_on:
-      - postgres-db
-    # environment:
-    #   - POSTGRES_URI=postgres://yobetit-app/yobetit-app
+      - postgres
     networks: 
       - yobetit-app-network
   postgres:

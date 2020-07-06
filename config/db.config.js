@@ -1,6 +1,6 @@
 module.exports = {
-    HOST: "localhost",
-    PORT: "55432",
+    HOST: process.env.PG_HOST || "localhost",
+    PORT: process.env.PG_PORT || "55432",
     USER: "postgres",
     PASSWORD: "123",
     DB: "postgres",
