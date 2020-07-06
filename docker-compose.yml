@@ -1,0 +1,56 @@
+version: '3.5'
+
+services:
+  yobetit-app:
+    image: yobetit-app:prod
+    build: 
+      context: .
+      target: prod
+    container_name: yobetit-app
+    restart: always
+    volumes: 
+      - .:/app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres-db
+    # environment:
+    #   - POSTGRES_URI=postgres://yobetit-app/yobetit-app
+    networks: 
+      - yobetit-app-network
+  postgres:
+    container_name: postgres-db
+    image: postgres:12
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - "55432:5432"
+    networks:
+      - yobetit-app-network
+    restart: unless-stopped
+
+  pgadmin:
+    container_name: postgres-db-pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    volumes:
+      - pgadmin:/root/.pgadmin
+    ports:
+      - "50080:80"
+    networks:
+      - yobetit-app-network
+    restart: unless-stopped
+
+networks:
+  yobetit-app-network:
+    driver: bridge
+
+volumes:
+  postgres:
+  pgadmin:
