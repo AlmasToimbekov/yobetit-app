@@ -21,7 +21,7 @@ app.get("/", (req, res) => {
     res.json({ message: "Welcome to bezkoder application." });
 });
 
-require("./routes/tutorial.routes")(app);
+require("./routes/router")(app);
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static('client/build'));
 
