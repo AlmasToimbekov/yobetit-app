@@ -5,27 +5,35 @@ export default class GetCountries extends Component {
   constructor(props) {
     super(props)
 
-    this.onChangeSearchTitle = this.onChangeSearchTitle.bind(this)
-    this.searchTitle = this.searchTitle.bind(this)
+    this.onChangeSearchCountry = this.onChangeSearchCountry.bind(this)
+    this.searchCountry = this.searchCountry.bind(this)
+    this.setActiveCountry = this.setActiveCountry.bind(this)
 
     this.state = {
       searchCountry: '',
       countriesFound: [],
       currentIndex: -1,
+      currentCountry: '',
     }
   }
 
-  onChangeSearchTitle(e) {
+  onChangeSearchCountry(e) {
     const searchCountry = e.target.value;
     this.setState({ searchCountry: searchCountry })
   }
-  searchTitle() {
+  searchCountry() {
     CountriesDataService.getByName(this.state.searchCountry)
-      .then(response => this.setState({countriesFound: response.data}))
+      .then(response => this.setState({ countriesFound: response.data }))
+  }
+  setActiveCountry(country, index) {
+    this.setState({
+      currentCountry: country,
+      currentIndex: index
+    });
   }
 
   render() {
-    const { searchCountry, countriesFound, currentIndex } = this.state
+    const { searchCountry, countriesFound, currentIndex, currentCountry } = this.state
     return (
       <div className="list row">
         <div className="col-md-8">
@@ -36,13 +44,13 @@ export default class GetCountries extends Component {
               className="form-control"
               placeholder="Search by title"
               value={searchCountry}
-              onChange={this.onChangeSearchTitle}
+              onChange={this.onChangeSearchCountry}
             />
             <div className="input-group-append">
               <button
                 className="btn btn-outline-secondary"
                 type="button"
-                onClick={this.searchTitle}
+                onClick={this.searchCountry}
               >
                 Search
               </button>
@@ -52,27 +60,54 @@ export default class GetCountries extends Component {
         <div className="col-md-6">
           <ul className="list-group">
             {countriesFound &&
-              countriesFound.map((tutorial, index) => (
+              countriesFound.map((country, index) => (
                 <li
                   className={
                     "list-group-item " +
                     (index === currentIndex ? "active" : "")
                   }
-                  onClick={() => console.log(tutorial, index)}
+                  onClick={() => this.setActiveCountry(country, index)}
                   key={index}
                 >
-                  {tutorial.name}
+                  {country.name}
                 </li>
               ))}
           </ul>
-
-          <button
-            className="m-3 btn btn-sm btn-danger"
-            onClick={this.removeAllTutorials}
-          >
-            Remove All
-          </button>
         </div>
+        <div className="col-md-6 my-5">
+          {currentCountry ? (
+            <div>
+              <h4>Country</h4>
+              <div>
+                <label>
+                  <strong>Subregion:</strong>
+                </label>{" "}
+                {currentCountry.subregion}
+              </div>
+              <div>
+                <label>
+                  <strong>Capital:</strong>
+                </label>{" "}
+                {currentCountry.capital}
+              </div>
+              <div>
+                <label>
+                  <strong>Population:</strong>
+                </label>{" "}
+                {currentCountry.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}
+              </div>
+              <div>
+                <img src={currentCountry.flag} width="500" />
+              </div>
+            </div>
+          ) : (
+              <div>
+                <br />
+                <p>Please find and select a country...</p>
+              </div>
+            )}
+        </div>
+        <span />
       </div>
     );
   }
