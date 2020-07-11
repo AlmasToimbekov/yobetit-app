@@ -8,10 +8,10 @@ class CountriesDataService {
     return getQuery('/getAll');
   }
   getByFullName(name) {
-    return getQuery('/getByFullName', {params: {name: name}});
+    return getQuery('/getByFullName', {params: {name}});
   }
   searchByName(name) {
-    return getQuery('/searchByName', {params: {name: name}});
+    return getQuery('/searchByName', {params: {name}});
   }
 }
 
