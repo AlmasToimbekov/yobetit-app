@@ -1,7 +1,7 @@
 {
   "name": "nodejs-express-sequelize-postrgresql",
   "version": "1.0.0",
-  "description": "Node.js Rest Apis with Express, Sequelize & PostgreSQL tutorial",
+  "description": "Project for YoBetIt",
   "main": "server.js",
   "scripts": {
     "prestart": "npm run build --prefix client",

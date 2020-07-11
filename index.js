@@ -23,11 +23,6 @@ db.sequelize.sync();
 //     console.log("Drop and re-sync db.");
 // });
 
-// simple route
-app.get("/", (req, res) => {
-    res.json({ message: "Welcome to bezkoder application." });
-});
-
 require("./routes/router")(app);
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static('client/build'));

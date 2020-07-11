@@ -4,7 +4,6 @@ module.exports = app => {
     next();
   });
 
-  app.use('/api/tutorials', require('./tutorial.routes'));
   app.use('/api/countries', require('./countries.routes'));
   app.use('/api/slots', require('./slot-mashine.routes'));
 };
