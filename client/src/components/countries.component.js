@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import CountriesDataService from "../services/countries.service";
+import { ButtonGroup, Button } from 'react-bootstrap';
 
 export default class GetCountries extends Component {
   constructor(props) {
@@ -17,13 +18,34 @@ export default class GetCountries extends Component {
     }
   }
 
+  clearState = () => this.setState({
+    countriesFound: [],
+    currentIndex: -1,
+    currentCountry: '',
+  })
+
   onChangeSearchCountry(e) {
     const searchCountry = e.target.value;
     this.setState({ searchCountry: searchCountry })
   }
-  searchCountry() {
-    CountriesDataService.getByName(this.state.searchCountry)
-      .then(response => this.setState({ countriesFound: response.data }))
+  searchCountry(mode) {
+    this.clearState()
+    switch (mode) {
+      case 'getOne':
+        CountriesDataService.getByFullName(this.state.searchCountry)
+          .then(response => this.setState({ countriesFound: response.data }))
+          break
+      case 'search':
+        CountriesDataService.searchByName(this.state.searchCountry)
+          .then(response => this.setState({ countriesFound: response.data }))
+          break
+      case 'getAll':
+        CountriesDataService.getAll()
+          .then(response => this.setState({ countriesFound: response.data }))
+          break
+      default:
+        break
+    }
   }
   setActiveCountry(country, index) {
     this.setState({
@@ -46,16 +68,27 @@ export default class GetCountries extends Component {
               value={searchCountry}
               onChange={this.onChangeSearchCountry}
             />
-            <div className="input-group-append">
-              <button
-                className="btn btn-outline-secondary"
-                type="button"
-                onClick={this.searchCountry}
-              >
-                Search
-              </button>
-            </div>
           </div>
+          <ButtonGroup className="mb-2" aria-label="Basic example">
+            <Button
+              variant="secondary"
+              onClick={() => this.searchCountry('getOne')}
+            >
+              Get country
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => this.searchCountry('search')}
+            >
+              Search by name
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => this.searchCountry('getAll')}
+            >
+              Get all countries
+            </Button>
+          </ButtonGroup>
         </div>
         <div className="col-md-6">
           <ul className="list-group">

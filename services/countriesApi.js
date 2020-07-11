@@ -9,7 +9,17 @@ const $baseHTTP = axios.create({
 })
 
 const api = {
-  getByName(name) {
+  getAll() {
+    return $baseHTTP.get('/all')
+  },
+  getByFullName(name) {
+    return $baseHTTP.get(`/name/${name}?fullText=true`)
+      .catch(err => {
+        if (err.response && err.response.status === 404) return {data: []}
+        throw Error(err)
+      })
+  },
+  searchByName(name) {
     return $baseHTTP.get(`/name/${name}`)
   }
 }
